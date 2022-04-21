@@ -1,16 +1,12 @@
 #!/bin/bash
 
-MODEL="Xerox EX C60-C70 Printer (EU)"
-INSTALLEDPRINTERS=$(sudo cat /etc/cups/printers.conf | awk '/^MakeModel/' | cut -f 2- -d ' ' | grep "$MODEL")
+# PRINTER MODEL, CHANGE IT...
+MODEL="Brother HL-L2350DW series-AirPrint"
 
-if [ "$INSTALLEDPRINTERS" == "$MODEL" ] ; then
-	
-	result="Printer found: $MODEL"
-	
-else
-	
-	result=""
-	
-fi
+# PRINTERS.CONF
+PRINTCONF=/etc/cups/printers.conf
 
-echo "<result>$result</result>"
+#COUNT INSTALLED PRINTERS
+CPRINT=$(cat $PRINTCONF | grep -c "$MODEL")
+
+echo -e "<result>$MODEL \n$CPRINT printer(s) installed</result>"

@@ -1,12 +1,38 @@
 #!/bin/bash
 
-# REMOVE SPECIFIC PRINTER
-# EXAMPLE MODEL="Xerox EX C60-C70 Printer (EU)"
+# PRINTER MODEL, CHANGE IT...
+MODEL="Brother HL-L2350DW series-AirPrint"
 
-MODEL="Xerox EX C60-C70 Printer (EU)"
-OLDPRINTER=$(cat /etc/cups/printers.conf | grep "$MODEL" -B 5 | head -n 1 | sed 's/<Printer //' | sed 's/>//')
+# PRINTERS.CONF
+PRINTCONF=/etc/cups/printers.conf
 
-lpadmin -x "$OLDPRINTER"
+#COUNT INSTALLED PRINTERS
+CPRINT=$(cat $PRINTCONF | grep -c "$MODEL")
 
-exit 0
+echo -e "$MODEL \n$CPRINT printer(s) installed: \n-----------------------"
 
+while read line; do
+	# READING EACH LINE
+	START=$(echo $line | grep '<Printer' -c)
+	
+	if [ "$START" == "1" ]; then
+		PNAME=$(echo $line | sed 's/<Printer //' | sed 's/>//')
+	fi
+	
+	MODELP=$(echo $line | grep 'MakeModel' -c)
+	
+	if [ "$MODELP" == "1" ]; then
+		PMODEL=$(echo $line | cut -d" " -f2- | sed 's/>//g')
+		LIST=$(echo $PNAME - $PMODEL)
+		PRINTER=$(echo $LIST | grep "$MODEL" | awk '{print $1}')
+		
+		if [ -n "$PRINTER" ]; then
+			echo "Name printer: $PRINTER"
+			#DELETE PRINTER
+			lpadmin -x $PRINTER
+		fi
+	fi
+	
+	n=$((n+1))
+	
+done < $PRINTCONF

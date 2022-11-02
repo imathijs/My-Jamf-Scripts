@@ -14,7 +14,7 @@ DEBUG=1
 if [ $DEBUG = 0 ]; then
 	SERIALCOMP=$(ioreg -l | grep IOPlatformSerialNumber | awk '{print $4}' | tr -d '"')
 else 
-	#
+	# USE SERIALNUMBER FOR TESTING
 	SERIALCOMP="<serial>"
 fi
 

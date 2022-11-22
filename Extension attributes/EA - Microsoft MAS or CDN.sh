@@ -27,7 +27,7 @@ else
 	if [ -e "$app" ]; then
 		echo "$app > CDN"
 	else
-		echo "None"
+		echo "$app > NOT INSTALLED"
 	fi
 fi
 

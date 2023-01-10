@@ -4,7 +4,7 @@ macosBuild=$(sw_vers -buildVersion)
 macosProduct=$(sw_vers -productVersion)
 macosShortVers=$(echo "$macosBuild" | head -c2)
 
-# MALWARE REMOVAL TOOL VERSION
+# MALWARE REMOVAL TOOL INSTALL DATE
 
 function mrt() {
 	if [ "$macosShortVers" -ge 21 ]; then

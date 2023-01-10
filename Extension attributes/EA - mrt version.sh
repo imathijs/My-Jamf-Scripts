@@ -6,7 +6,7 @@ macosShortVers=$(echo "$macosBuild" | head -c2)
 
 # MALWARE REMOVAL TOOL VERSION
 
-function system_settings() {
+function mrt() {
 	if [ "$macosShortVers" -ge 21 ]; then
 		# IF MACOS 12 OR HIGHER
 		
@@ -19,6 +19,6 @@ function system_settings() {
 	fi
 
 }
-system_settings
+mrt
 
 echo "<result>$result</result>"

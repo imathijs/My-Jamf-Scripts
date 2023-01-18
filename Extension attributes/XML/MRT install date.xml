@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>MRT install date</displayName>
+<description/>
+<dataType>date</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+&#13;
+macosBuild=$(sw_vers -buildVersion)&#13;
+macosProduct=$(sw_vers -productVersion)&#13;
+macosShortVers=$(echo "$macosBuild" | head -c2)&#13;
+&#13;
+# MALWARE REMOVAL TOOL INSTALL DATE&#13;
+&#13;
+function mrt() {&#13;
+	if [ "$macosShortVers" -ge 21 ]; then&#13;
+		# IF MACOS 12 OR HIGHER&#13;
+		&#13;
+		last_MRT_update_epoch_time=$(for i in $(pkgutil --pkgs=".*.MRT.*."); do pkgutil --pkg-info $i | awk '/install-time/ {print $2}'; done | sort -n | tail -1)&#13;
+		last_MRT_update_human_readable_time=$(/bin/date -r "$last_MRT_update_epoch_time" '+%Y-%m-%d %H:%M:%S')&#13;
+		result="$last_MRT_update_human_readable_time"&#13;
+		&#13;
+	else&#13;
+		# IF MACOS 11 OR LOWER&#13;
+		result="macOS version not supported"&#13;
+	fi&#13;
+&#13;
+}&#13;
+mrt&#13;
+&#13;
+echo "&lt;result&gt;$result&lt;/result&gt;"</scriptContentsMac>
+</extensionAttribute>

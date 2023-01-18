@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>XProtect Version</displayName>
+<description/>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+&#13;
+macosBuild=$(sw_vers -buildVersion)&#13;
+macosProduct=$(sw_vers -productVersion)&#13;
+macosShortVers=$(echo "$macosBuild" | head -c2)&#13;
+&#13;
+# XPROTECT VERSION&#13;
+&#13;
+function system_settings() {&#13;
+	if [ "$macosShortVers" -ge 21 ]; then&#13;
+		# IF MACOS 12 OR HIGHER&#13;
+		&#13;
+		MRT_version=$(for i in $(pkgutil --pkgs=".*.XProtect.*."); do pkgutil --pkg-info $i | awk '/version/ {print $2}'; done | sort -n | tail -1)&#13;
+		result="$MRT_version"&#13;
+		&#13;
+	else&#13;
+		# IF MACOS 11 OR LOWER&#13;
+		result="macOS version not supported"&#13;
+	fi&#13;
+&#13;
+}&#13;
+system_settings&#13;
+&#13;
+echo "&lt;result&gt;$result&lt;/result&gt;"</scriptContentsMac>
+</extensionAttribute>

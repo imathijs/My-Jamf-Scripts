@@ -9,4 +9,6 @@ TimeFormatted=$(date -jf %s $pwLastChangeEpoch +%F\ %T)
 
 echo "Date last password change: $TimeFormatted"
 
-echo "<result>$(( ( $(date +%s) - $pwLastChangeEpoch ) / 86400 )) days</results>"
+DAYS=$(printf $((($(date +%s) - $pwLastChangeEpoch) / 86400)))
+
+echo "<result>$DAYS</result>"

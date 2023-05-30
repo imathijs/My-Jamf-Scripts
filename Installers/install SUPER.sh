@@ -11,11 +11,11 @@ echo "##################################"
 echo "Running download SUPER Script..."
 
 # Create tmp directory
-if [ ! -d $output_folder ]; then
+if [ ! -d ${output_folder} ]; then
 	echo "##################################"
 	echo "Create super folder in /tmp"
-	mkdir "$output_folder"
-	chmod 755 "$output_folder"
+	mkdir "${output_folder}"
+	chmod 755 "${output_folder}"
 else
 	echo "##################################"
 	echo "Found super folder"
@@ -24,7 +24,7 @@ fi
 # Download super
 echo "##################################"
 echo "Download SUPER from Github..."
-curl -s -o "$output_folder/$file" -L "$url"
+curl -s -o "${output_folder}/${file}" -L "${url}"
 
 # Check version
 superVERSION=$(awk -F '"' '/superVERSION=/ { print $2 }' ${output_folder}/${file})
@@ -35,13 +35,13 @@ echo "##################################"
 # Make script executable
 echo "Change permissions..."
 echo "##################################"
-chmod +x "$output_folder/$file"
+chmod +x "${output_folder}/${file}"
 
 ### Run super
 echo "Run SUPER install..."
 echo "##################################"
-cd $output_folder
-./$file
+cd ${output_folder}
+./${file}
 
 # sleep
 sleep 5 
@@ -49,4 +49,4 @@ sleep 5
 # remove temp directory
 echo "Run cleanup. /tmp/super deleted."
 echo "##################################"
-rm -Rf $output_folder
+rm -Rf ${output_folder}

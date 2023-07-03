@@ -5,7 +5,7 @@
 URL="https://<url>.jamfcloud.com"
 username="<login>"
 password="<password>"
-$apiname="<name>"
+apiname="<name>"
 apipassword="<password>"
 
 encodedCredentials=$( printf "$username:$password" | /usr/bin/iconv -t ISO-8859-1 | /usr/bin/base64 -i - )

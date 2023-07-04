@@ -49,15 +49,15 @@ userDATA="
 </account>
 "
 
-## CREATE USER
-#curl --request POST \
-#--header "Authorization: Bearer $token" \
-#--url ${URL}/JSSResource/accounts/userid/0 \
-#--header "Content-Type: text/xml" \
-#--data "$userDATA"
-
-READ USERS
-curl --request GET \
+# CREATE USER
+curl --request POST \
 --header "Authorization: Bearer $token" \
---url "${URL}/JSSResource/accounts" \
---header 'accept: application/json'
+--url ${URL}/JSSResource/accounts/userid/0 \
+--header "Content-Type: text/xml" \
+--data "$userDATA"
+
+## READ USERS
+#curl --request GET \
+#--header "Authorization: Bearer $token" \
+#--url "${URL}/JSSResource/accounts" \
+#--header 'accept: application/json'

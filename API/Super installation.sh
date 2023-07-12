@@ -18,6 +18,7 @@ apipassword="change_this_password"
 super_main="https://raw.githubusercontent.com/Macjutsu/super/main"
 script_url="${super_main}/super"
 
+
 ##################################
 # BEARER TOKEN
 encodedCredentials=$( printf "$username:$password" | /usr/bin/iconv -t ISO-8859-1 | /usr/bin/base64 -i - )
@@ -89,7 +90,6 @@ for superoptions in ${scripts_SUPER[@]}; do
 			parameters_script="<parameters>
 	<parameter4>--jamf-account=apiuser</parameter4>
 	<parameter5>--jamf-password=apipassword</parameter5>
-	<parameter6>--reset-super</parameter6>
 	</parameters>"
 		;;
 		
@@ -102,7 +102,12 @@ for superoptions in ${scripts_SUPER[@]}; do
 	
 # SUPER URL
 script_contents=$(curl -s "$script_url")
+script_version=$($script_contents | grep -o "superVERSION=\"[^\"]*\"" | cut -d'"' -f2)
 escaped_script_contents=$(echo "$script_contents" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g; s/"/\&quot;/g')
+
+	if [ -n $script_version ]; then
+		echo "Install SUPER version: $script_version"
+	fi
 
 script_XML="
 <script>
@@ -318,7 +323,6 @@ policy_XML="
 	<priority>After</priority>
 	<parameter4>--jamf-account=$apiname</parameter4>
 	<parameter5>--jamf-password=$apipassword</parameter5>
-	<parameter6>--reset-super</parameter6>
 	</script>
 	</scripts>
 	<printers/>

@@ -1,23 +1,37 @@
 #!/bin/bash
 #
 # JAMF PRO SUPER INSTALLATION SCRIPT
+# Mathijs de Willigen | Prowarehouse
+# SCRIPT IS "AS IS" 
+#
+# Automated install of S.U.P.E.R into Jamf Pro
+# Creates:
+# - API user
+# - Configuration Profile with PPPC
+# - S.U.P.E.R and Uninstaller scripts
+# - Policy
+# 
+# This does not set the scoping!
 #
 ##################################
-# CREATE USER FOR SUPER
+# JAMF PRO LOGIN
 jamfURL="https://<url>.jamfcloud.com"
 username="<login>"
 password="<password>"
 
 ##################################
-# API CREDENTIALS
-apiname="_superapi"
-apipassword="change_this_password"
+# SUPER API CREDENTIALS, PASSWORD WILL BE GENERATED
+apiName="_superapi"
+
+# GENERATE API PASSWORD
+passCharacters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+=-"
+passLenght=16
+apiPassword=$(openssl rand -base64 48 | tr -dc "$passCharacters" | head -c "$passLenght")
 
 ##################################
 # SUPER URL
 super_main="https://raw.githubusercontent.com/Macjutsu/super/main"
 script_url="${super_main}/super"
-
 
 ##################################
 # BEARER TOKEN
@@ -38,12 +52,12 @@ createAPIUSER() {
 user_XML="
 <account>
 <id>-1</id>
-<name>$apiname</name>
+<name>$apiName</name>
 <directory_user>false</directory_user>
 <full_name>SUPER API</full_name>
 <email></email>
 <email_address></email_address>
-<password>$apipassword</password>
+<password>$apiPassword</password>
 <enabled>Enabled</enabled>
 <force_password_change>false</force_password_change>
 <access_level>Full Access</access_level>
@@ -102,7 +116,7 @@ for superoptions in ${scripts_SUPER[@]}; do
 	
 # SUPER URL
 script_contents=$(curl -s "$script_url")
-script_version=$($script_contents | grep -o "superVERSION=\"[^\"]*\"" | cut -d'"' -f2)
+script_version=$(echo "$script_contents" | grep -o "superVERSION=\"[^\"]*\"" | cut -d'"' -f2)
 escaped_script_contents=$(echo "$script_contents" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g; s/"/\&quot;/g')
 
 	if [ -n $script_version ]; then
@@ -321,8 +335,8 @@ policy_XML="
 	<id>$script_id</id>
 	<name>SUPER</name>
 	<priority>After</priority>
-	<parameter4>--jamf-account=$apiname</parameter4>
-	<parameter5>--jamf-password=$apipassword</parameter5>
+	<parameter4>--jamf-account=$apiName</parameter4>
+	<parameter5>--jamf-password=$apiPassword</parameter5>
 	</script>
 	</scripts>
 	<printers/>

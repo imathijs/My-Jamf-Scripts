@@ -48,6 +48,23 @@ token=$( /usr/bin/awk -F \" '{ print $4 }' <<< "$authToken" | /usr/bin/xargs )
 ##################################
 # FUNCTIONS
 
+checkCredentials() {
+	
+	# PROMPT IF INFO IS MISSING
+	if [ "$jamfURL" == "https://<url>.jamfcloud.com" ]  || [ "$jamfURL" == "" ]; then
+		echo "Missing information. Please enter your Jamf Pro URL (and port)"
+		exit 0
+	fi
+	if [ "$username" == "<login>" ]; then
+		echo "Missing information. Please enter your Jamf Pro user"
+		exit 0
+	fi
+	if [ "$password" == "<password>" ]; then
+		echo "Missing information. Please enter your Jamf Pro password"
+		exit 0
+	fi
+}
+
 createAPIUSER() {
 user_XML="
 <account>
@@ -360,7 +377,8 @@ policy_XML="
 
 ##################################
 # RUN FUNCTIONS
-
+			
+checkCredentials
 createAPIUSER
 createSCRIPT
 createPROFILE

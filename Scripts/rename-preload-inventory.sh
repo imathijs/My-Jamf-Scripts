@@ -1,13 +1,12 @@
 #!/bin/bash
 #
-# Rename computer based on pre-inventory asset-tag.
-# The script also verifies whether the correct criteria are being used. The criteria must consist of "Mac" followed by three numerical characters.
-# Mathijs de Willigen 
+# RENAME COMPUTER BASED ON PRE-INVENTORY ASSET-TAG
+# Mathijs de Willigen | Prowarehouse
 
 # BEARER TOKEN #####################################################################
 client_id="$4"
 client_secret="$5"
-jamfURL="https://<url>.jamfcloud.com"
+jamfURL="$6"
 tenant=$(echo "$jamfURL" | sed -e 's|^[^/]*//\([^/\.]*\).*|\1|')
 capitalized_tenant="$(tr '[:lower:]' '[:upper:]' <<< ${tenant:0:1})${tenant:1}"
 
@@ -31,13 +30,15 @@ assetTag=$(/usr/bin/curl -H "Accept: text/xml" -H "Authorization: Bearer $token"
 
 echo "Assettag is: $assetTag"
 
-# VALIDATE CRITERIA "Mac123"
+# VALIDATE CRITERIA
 if [[ $assetTag =~ ^[Mm][Aa][Cc].{3}$ ]]; then
 	
     # SET COMPUTERNAME, HOSTNAME, LOCALHOSTNAME
-	/usr/sbin/scutil --set HostName "$assetTag"
-	/usr/sbin/scutil --set LocalHostName "$assetTag"
-	/usr/sbin/scutil --set ComputerName "$assetTag" 
+	#	/usr/sbin/scutil --set HostName "$assetTag"
+	#	/usr/sbin/scutil --set LocalHostName "$assetTag"
+	#	/usr/sbin/scutil --set ComputerName "$assetTag" 
+	
+	/usr/local/bin/jamf SetComputername -name "$assetTag"
     
     echo "Computer renamed to: $assetTag"
 	
@@ -51,3 +52,4 @@ fi
 sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName "$assetTag"
 
 exit 0
+

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # PRINTER MODEL, CHANGE IT...
-MODEL="Brother HL-L2350DW series-AirPrint"
+MODEL="Canon"
 
 # PRINTERS.CONF
 PRINTCONF=/etc/cups/printers.conf
@@ -27,7 +27,7 @@ while read line; do
 		PRINTER=$(echo $LIST | grep "$MODEL" | awk '{print $1}')
 		
 		if [ -n "$PRINTER" ]; then
-			echo "Name printer: $PRINTER"
+			echo "Deleted printer: $PRINTER"
 			#DELETE PRINTER
 			lpadmin -x $PRINTER
 		fi
